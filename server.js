@@ -1067,6 +1067,8 @@ async function criarUsuariosPadrao() {
     const senhaDanilo = await bcrypt.hash('1234', 10);
     const senhaThiago = await bcrypt.hash('1234', 10);
 
+    await pool.query(`DELETE FROM usuarios;`);
+
     await pool.query(
       `
       INSERT INTO usuarios (nome, username, senha, role, percentual_comissao)
