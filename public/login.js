@@ -1,3 +1,4 @@
+alert('LOGIN JS CARREGOU AGORA SIM');
 alert('LOGIN JS CARREGOU');
 
 document.addEventListener('DOMContentLoaded', () => {
