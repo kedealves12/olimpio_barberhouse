@@ -929,54 +929,6 @@ app.patch('/api/usuarios/alterar-senha', requireAuth, async (req, res) => {
   }
 });
 
-async function criarTabelas() {
-  try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS usuarios (
-        id SERIAL PRIMARY KEY,
-        nome TEXT,
-        username TEXT UNIQUE,
-        senha TEXT,
-        role TEXT,
-        percentual_comissao NUMERIC,
-        ativo BOOLEAN DEFAULT TRUE,
-        aparece_na_agenda BOOLEAN DEFAULT TRUE
-      );
-    `);
-
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS agendamentos (
-        id SERIAL PRIMARY KEY,
-        cliente_nome TEXT,
-        cliente_telefone TEXT,
-        barbeiro_id INTEGER REFERENCES usuarios(id),
-        servico TEXT,
-        valor NUMERIC,
-        data DATE,
-        hora TIME,
-        status TEXT DEFAULT 'agendado',
-        forma_pagamento TEXT
-      );
-    `);
-
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS notificacoes (
-        id SERIAL PRIMARY KEY,
-        usuario_id INTEGER,
-        mensagem TEXT,
-        lida BOOLEAN DEFAULT FALSE,
-        criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-    `);
-
-    console.log('Tabelas criadas com sucesso');
-  } catch (err) {
-    console.error('Erro ao criar tabelas:', err);
-  }
-}
-
-criarTabelas();
-
 async function iniciarBanco() {
   try {
     await pool.query(`
@@ -995,78 +947,28 @@ async function iniciarBanco() {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS agendamentos (
         id SERIAL PRIMARY KEY,
-        cliente_nome TEXT,
-        cliente_telefone TEXT,
+        cliente TEXT,
+        telefone TEXT,
         barbeiro_id INTEGER REFERENCES usuarios(id),
         servico TEXT,
         valor NUMERIC,
+        duracao INTEGER DEFAULT 0,
         data DATE,
         hora TIME,
         status TEXT DEFAULT 'agendado',
-        forma_pagamento TEXT
+        pagamento TEXT,
+        origem TEXT DEFAULT 'agendado',
+        criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        concluido_em TIMESTAMP,
+        cancelado_em TIMESTAMP
       );
     `);
 
     await pool.query(`
       CREATE TABLE IF NOT EXISTS notificacoes (
         id SERIAL PRIMARY KEY,
-        usuario_id INTEGER,
-        mensagem TEXT,
-        lida BOOLEAN DEFAULT FALSE,
-        criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-    `);
-
-    await pool.query(`
-      INSERT INTO usuarios (nome, username, senha, role, percentual_comissao)
-      VALUES
-        ('Danilo', 'danilo', '1234', 'admin', 100),
-        ('Thiago', 'thiago', '1234', 'barbeiro', 50)
-      ON CONFLICT (username) DO NOTHING;
-    `);
-
-    console.log('🔥 Banco pronto');
-  } catch (err) {
-    console.error('Erro ao iniciar banco:', err);
-  }
-}
-
-iniciarBanco(); 
-
-async function iniciarBanco() {
-  try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS usuarios (
-        id SERIAL PRIMARY KEY,
-        nome TEXT,
-        username TEXT UNIQUE,
-        senha TEXT,
-        role TEXT,
-        percentual_comissao NUMERIC,
-        ativo BOOLEAN DEFAULT TRUE,
-        aparece_na_agenda BOOLEAN DEFAULT TRUE
-      );
-    `);
-
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS agendamentos (
-        id SERIAL PRIMARY KEY,
-        cliente_nome TEXT,
-        cliente_telefone TEXT,
-        barbeiro_id INTEGER REFERENCES usuarios(id),
-        servico TEXT,
-        valor NUMERIC,
-        data DATE,
-        hora TIME,
-        status TEXT DEFAULT 'agendado',
-        forma_pagamento TEXT
-      );
-    `);
-
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS notificacoes (
-        id SERIAL PRIMARY KEY,
-        usuario_id INTEGER,
+        usuario_id INTEGER REFERENCES usuarios(id),
+        titulo TEXT,
         mensagem TEXT,
         lida BOOLEAN DEFAULT FALSE,
         criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -1108,16 +1010,6 @@ async function criarUsuariosPadrao() {
   }
 }
 
-(async () => {
-  await iniciarBanco();
-  await criarUsuariosPadrao();
-
-  const port = process.env.PORT || 3001;
-
-  app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`);
-  });
-})();
 (async () => {
   await iniciarBanco();
   await criarUsuariosPadrao();
