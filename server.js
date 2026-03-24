@@ -12,7 +12,6 @@ const app = express();
 app.set('trust proxy', 1);
 
 app.use(express.json());
-const path = require('path');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
