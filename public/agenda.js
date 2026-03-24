@@ -122,7 +122,7 @@ async function carregarHorarios() {
 
   const params = new URLSearchParams({ data, barbeiro, servico });
 
-  const res = await fetch(`/api/horarios-disponiveis?${params}`);
+  const res = await fetch(`/api/horarios-disponiveis?${params.toString()}`);
   const horarios = await res.json();
 
   if (!res.ok) {
