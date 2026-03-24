@@ -1,17 +1,17 @@
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('APP CARREGOU');
+alert('APP CARREGOU');
 
+document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('loginForm');
   const mensagem = document.getElementById('mensagem');
 
   if (!form) {
-    console.error('loginForm não encontrado');
+    alert('loginForm não encontrado');
     return;
   }
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    console.log('SUBMIT DISPAROU');
+    alert('SUBMIT DISPAROU');
 
     mensagem.textContent = '';
 
@@ -30,8 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const data = await res.json();
 
-      console.log('RESPOSTA:', data);
-
       if (!res.ok) {
         mensagem.textContent = data.erro || 'Erro no login';
         return;
@@ -47,9 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      mensagem.textContent = 'Login ok, mas sem redirecionamento';
+      mensagem.textContent = 'Login ok, mas sem perfil válido.';
     } catch (err) {
-      console.error(err);
       mensagem.textContent = 'Erro ao conectar com servidor';
     }
   });
