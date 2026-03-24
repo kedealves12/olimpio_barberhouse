@@ -912,6 +912,54 @@ app.patch('/api/usuarios/alterar-senha', requireAuth, async (req, res) => {
   }
 });
 
+async function criarTabelas() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS usuarios (
+        id SERIAL PRIMARY KEY,
+        nome TEXT,
+        username TEXT UNIQUE,
+        senha TEXT,
+        role TEXT,
+        percentual_comissao NUMERIC,
+        ativo BOOLEAN DEFAULT TRUE,
+        aparece_na_agenda BOOLEAN DEFAULT TRUE
+      );
+    `);
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS agendamentos (
+        id SERIAL PRIMARY KEY,
+        cliente_nome TEXT,
+        cliente_telefone TEXT,
+        barbeiro_id INTEGER REFERENCES usuarios(id),
+        servico TEXT,
+        valor NUMERIC,
+        data DATE,
+        hora TIME,
+        status TEXT DEFAULT 'agendado',
+        forma_pagamento TEXT
+      );
+    `);
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS notificacoes (
+        id SERIAL PRIMARY KEY,
+        usuario_id INTEGER,
+        mensagem TEXT,
+        lida BOOLEAN DEFAULT FALSE,
+        criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    console.log('Tabelas criadas com sucesso');
+  } catch (err) {
+    console.error('Erro ao criar tabelas:', err);
+  }
+}
+
+criarTabelas();
+
 app.listen(PORT,  () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
