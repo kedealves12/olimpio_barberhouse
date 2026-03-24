@@ -4,6 +4,9 @@ const express = require('express');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 const pool = require('./config/db');
+const path = require('path'); // 👈 sobe pra cá
+
+const app = express();
 
 const app = express();
 
