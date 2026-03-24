@@ -10,7 +10,9 @@ const app = express();
 app.set('trust proxy', 1);
 
 app.use(express.json());
-app.use(express.static('public'));
+const path = require('path');
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
   secret: process.env.SESSION_SECRET || '123456',
