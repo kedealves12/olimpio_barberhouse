@@ -74,7 +74,9 @@ async function tocarSomNotificacao() {
 }
 
 async function carregarUsuario() {
-  const res = await fetch('/api/me');
+  const res = await fetch('/api/me', {
+  credentials: 'include'
+})
   const data = await res.json();
 
   if (!res.ok || data.role !== 'admin') {
@@ -88,7 +90,9 @@ async function carregarUsuario() {
 }
 
 async function carregarNotificacoes() {
-  const res = await fetch('/api/notificacoes');
+  const res = await fetch('/api/notificacoes', {
+  credentials: 'include'
+})
   const data = await res.json();
 
   if (!res.ok) return;
@@ -135,7 +139,9 @@ async function carregarNotificacoes() {
 }
 
 async function carregarResumo() {
-  const res = await fetch('/api/barbeiro/resumo');
+  const res = await fetch('/api/barbeiro/resumo', {
+  credentials: 'include'
+})
   const data = await res.json();
 
   if (!res.ok) {
@@ -165,7 +171,9 @@ async function carregarResumo() {
 }
 
 async function carregarAgenda() {
-  const res = await fetch('/api/barbeiro/agenda');
+  const res = await fetch('/api/barbeiro/agenda', {
+  credentials: 'include'
+})
   const agenda = await res.json();
 
   if (!res.ok) {
@@ -216,7 +224,9 @@ async function carregarAgenda() {
 }
 
 async function carregarConcluidos() {
-  const res = await fetch('/api/barbeiro/concluidos');
+  const res = await fetch('/api/barbeiro/concluidos', {
+  credentials: 'include'
+})
   const concluidos = await res.json();
 
   if (!res.ok) {
