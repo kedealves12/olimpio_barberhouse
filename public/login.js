@@ -1,4 +1,4 @@
-alert('APP CARREGOU');
+alert('LOGIN JS CARREGOU');
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('loginForm');
@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       mensagem.textContent = 'Login ok, mas sem perfil válido.';
     } catch (err) {
+      console.error(err);
       mensagem.textContent = 'Erro ao conectar com servidor';
     }
   });
