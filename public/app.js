@@ -8,11 +8,16 @@ form.addEventListener('submit', async (e) => {
   const password = document.getElementById('password').value.trim();
 
   try {
-    const res = await fetch('/api/login', {
+const res = await fetch('/api/login', {
   method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  credentials: 'include', // 🔥 ESSA LINHA
-  body: JSON.stringify({ username, password })
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  credentials: 'include',
+  body: JSON.stringify({
+    username,
+    password
+  })
 });
     const data = await res.json();
 
