@@ -1,0 +1,16 @@
+{
+  "name": "dk-novo",
+  "version": "1.0.0",
+  "description": "Sistema de barbearia",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.3.1",
+    "express": "^4.22.1",
+    "express-session": "^1.19.0",
+    "pg": "^8.20.0"
+  }
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Admin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="header-flex">
+      <div>
+        <h1 id="tituloAdmin">Painel Admin</h1>
+        <p>Seus atendimentos, saldo e acessos administrativos</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="painel-topo">
+      <button id="btnFinanceiro" type="button">Financeiro</button>
+      <button id="btnUsuarios" type="button">Usuários</button>
+      <button id="btnSenha" type="button">Alterar senha</button>
+      <button id="btnSair" type="button">Sair</button>
+    </div>
+
+    <section class="bloco">
+      <div class="notificacao-topo">
+        <h2>Notificações</h2>
+        <div class="badge-area">
+          <span id="badgeNotificacoes" class="badge-notificacao">0</span>
+          <button id="btnMarcarLidas" type="button">Marcar todas como lidas</button>
+        </div>
+      </div>
+      <div id="listaNotificacoes"></div>
+    </section>
+
+    <div class="cards-resumo">
+      <div class="card-resumo">
+        <h3>Saldo do dia</h3>
+        <p id="saldoDia">R$ 0,00</p>
+      </div>
+
+      <div class="card-resumo">
+        <h3>Saldo do mês</h3>
+        <p id="saldoMes">R$ 0,00</p>
+      </div>
+    </div>
+
+    <section class="bloco">
+      <h2>Minha agenda de hoje e amanhã</h2>
+      <div id="agendaLista"></div>
+    </section>
+
+    <section class="bloco">
+      <h2>Meus atendimentos concluídos</h2>
+      <div id="concluidosLista"></div>
+    </section>
+
+    <section class="bloco">
+      <h2>Meu histórico mensal</h2>
+      <div id="historicoMensal"></div>
+    </section>
+
+    <p id="mensagem"></p>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alterar senha</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="header-flex">
+      <div>
+        <h1>Alterar senha</h1>
+        <p>Confirme sua senha atual para trocar</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="painel-topo">
+      <button id="btnVoltar" type="button">Voltar</button>
+      <button id="btnSair" type="button">Sair</button>
+    </div>
+
+    <form id="formSenha">
+      <input type="password" id="senhaAtual" placeholder="Senha atual" required>
+      <input type="password" id="novaSenha" placeholder="Nova senha" required>
+      <input type="password" id="confirmarSenha" placeholder="Confirmar nova senha" required>
+
+      <button type="submit">Alterar senha</button>
+    </form>
+
+    <p id="mensagem"></p>
+  </div>
+
+  <script src="senha.js"></script>
+</body>
+</html>

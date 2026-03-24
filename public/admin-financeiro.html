@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financeiro da Barbearia</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="header-flex">
+      <div>
+        <h1>Financeiro da Barbearia</h1>
+        <p>Visão geral, histórico e lançamentos manuais</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="painel-topo">
+      <button id="btnVoltar" type="button">Voltar</button>
+      <button id="btnSair" type="button">Sair</button>
+    </div>
+
+    <div class="cards-resumo">
+      <div class="card-resumo">
+        <h3>Bruto da barbearia</h3>
+        <p id="brutoBarbearia">R$ 0,00</p>
+      </div>
+
+      <div class="card-resumo">
+        <h3>Líquido dos barbeiros</h3>
+        <p id="liquidoBarbeiros">R$ 0,00</p>
+      </div>
+
+      <div class="card-resumo">
+        <h3>Lucro da barbearia</h3>
+        <p id="lucroBarbearia">R$ 0,00</p>
+      </div>
+    </div>
+
+    <section class="bloco">
+      <h2>Resumo por usuário</h2>
+      <div id="usuariosResumo"></div>
+    </section>
+
+    <section class="bloco">
+      <h2>Histórico mensal da barbearia</h2>
+      <div id="historicoMensalGeral"></div>
+    </section>
+
+    <section class="bloco">
+      <h2>Últimos lançamentos manuais</h2>
+      <div id="manuaisRecentes"></div>
+    </section>
+
+    <section class="bloco">
+      <h2>Lançamento manual</h2>
+
+      <form id="formLancamentoManual">
+        <input type="text" id="clienteManual" placeholder="Nome do cliente" required>
+
+        <select id="barbeiroManual" required>
+          <option value="">Selecione o barbeiro</option>
+        </select>
+
+        <select id="servicoManual" required>
+          <option value="">Selecione o serviço</option>
+        </select>
+
+        <input type="number" id="valorManual" placeholder="Valor" step="0.01" min="0" required>
+
+        <select id="pagamentoManual">
+          <option value="">Forma de pagamento</option>
+          <option value="pix">Pix</option>
+          <option value="cartao">Cartão</option>
+          <option value="especie">Espécie</option>
+        </select>
+
+        <button type="submit">Salvar lançamento</button>
+      </form>
+    </section>
+
+    <p id="mensagem"></p>
+  </div>
+
+  <script src="admin-financeiro.js"></script>
+</body>
+</html>

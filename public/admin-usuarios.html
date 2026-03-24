@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciar Usuários</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="header-flex">
+      <div>
+        <h1>Gerenciar Usuários</h1>
+        <p>Criar, desativar e reativar usuários</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="painel-topo">
+      <button id="btnVoltar" type="button">Voltar</button>
+      <button id="btnSair" type="button">Sair</button>
+    </div>
+
+    <section class="bloco">
+      <h2>Novo usuário</h2>
+
+      <form id="formNovoUsuario">
+        <input type="text" id="nome" placeholder="Nome" required>
+        <input type="text" id="username" placeholder="Usuário" required>
+        <input type="password" id="senha" placeholder="Senha" required>
+
+        <select id="role" required>
+          <option value="">Selecione o tipo</option>
+          <option value="barbeiro">Barbeiro</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <input type="number" id="percentual" placeholder="Percentual de comissão" value="50" step="0.01" min="0" max="100" required>
+
+        <button type="submit">Criar usuário</button>
+      </form>
+    </section>
+
+    <section class="bloco">
+      <h2>Usuários cadastrados</h2>
+      <div id="listaUsuarios"></div>
+    </section>
+
+    <p id="mensagem"></p>
+  </div>
+
+  <script src="admin-usuarios.js"></script>
+</body>
+</html>
