@@ -1,6 +1,3 @@
-alert('LOGIN JS CARREGOU AGORA SIM');
-alert('LOGIN JS CARREGOU');
-
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('loginForm');
   const mensagem = document.getElementById('mensagem');
@@ -12,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    alert('SUBMIT DISPAROU');
 
     mensagem.textContent = '';
 
