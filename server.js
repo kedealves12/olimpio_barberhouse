@@ -19,12 +19,11 @@ app.use(session({
   secret: process.env.SESSION_SECRET || '123456',
   resave: false,
   saveUninitialized: false,
-  proxy: true,
+  proxy: true, // importante no render
   cookie: {
     httpOnly: true,
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 1000 * 60 * 60 * 12
+    sameSite: 'none', // 🔥 ESSENCIAL
+    secure: true // 🔥 ESSENCIAL (https)
   }
 }));
 
