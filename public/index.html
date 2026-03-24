@@ -3,22 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Barbearia</title>
+  <title>Olímpio Barberhouse</title>
+  <link rel="icon" href="navalha.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Login Barbearia</h1>
+  <header class="topbar">
+    <div class="header-flex">
+      <img src="logo.png" alt="Logo" class="logo">
 
-    <form id="loginForm">
-      <input type="text" id="username" placeholder="Usuário" required>
-      <input type="password" id="password" placeholder="Senha" required>
-      <button type="submit">Entrar</button>
+      <div>
+        <h1>Olímpio Barberhouse</h1>
+        <p>Agende seu horário</p>
+      </div>
+
+      <div style="margin-left:auto;">
+        <a href="login.html" class="btn-topo">Área do barbeiro</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2>Agendar atendimento</h2>
+
+    <form id="agendaForm">
+      <input type="text" id="cliente" placeholder="Nome do cliente" required>
+      <input type="text" id="telefone" placeholder="Telefone do cliente">
+
+      <select id="barbeiro" required>
+        <option value="">Selecione o barbeiro</option>
+        <option value="qualquer">Sem preferência</option>
+      </select>
+
+      <select id="servico" required>
+        <option value="">Selecione o serviço</option>
+        <option value="corte">Corte</option>
+        <option value="barba">Barba</option>
+        <option value="perfil">Perfil</option>
+        <option value="sobrancelha">Sobrancelha</option>
+        <option value="corte_1_so_pente">Corte 1 so pente</option>
+        <option value="pigmentacao">Pigmentação</option>
+        <option value="limpeza_facial">Limpeza facial</option>
+        <option value="corte_barba">Corte + barba</option>
+        <option value="corte_sobrancelha">Corte + sobrancelha</option>
+        <option value="corte_limpeza_facial">Corte + limpeza facial</option>
+        <option value="corte_pigmentacao">Corte + pigmentação</option>
+        <option value="corte_completo">Corte completo</option>
+        <option value="corte_completo_pigmentacao">Corte completo + pigmentação</option>
+        <option value="corte_completo_limpeza_facial">Corte completo + limpeza facial</option>
+      </select>
+
+      <input type="date" id="data" required>
+
+      <select id="hora" required>
+        <option value="">Selecione o horário</option>
+      </select>
+
+      <div id="horarios"></div>
+
+      <select id="pagamento">
+        <option value="">Forma de pagamento</option>
+        <option value="pix">Pix</option>
+        <option value="cartao">Cartão</option>
+        <option value="especie">Espécie</option>
+      </select>
+
+      <div id="infoServico" class="info-servico"></div>
+
+      <button type="submit">Confirmar agendamento</button>
     </form>
 
     <p id="mensagem"></p>
   </div>
 
-  <script src="login.js?v=2" defer></script>
+  <script src="agenda.js?v=2" defer></script>
 </body>
 </html>
