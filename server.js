@@ -9,8 +9,6 @@ const app = express();
 
 app.set('trust proxy', 1);
 
-const PORT = process.env.PORT || 3001;
-
 app.use(express.json());
 app.use(express.static('public'));
 
@@ -1113,7 +1111,9 @@ async function criarUsuariosPadrao() {
   await iniciarBanco();
   await criarUsuariosPadrao();
 
-  app.listen(process.env.PORT || 3001, () => {
-    console.log('Servidor rodando');
+  const port = process.env.PORT || 3001;
+
+  app.listen(port, () => {
+    console.log(`Servidor rodando na porta ${port}`);
   });
 })();
