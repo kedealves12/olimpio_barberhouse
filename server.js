@@ -8,7 +8,6 @@ const path = require('path'); // 👈 sobe pra cá
 
 const app = express();
 
-const app = express();
 
 app.set('trust proxy', 1);
 
