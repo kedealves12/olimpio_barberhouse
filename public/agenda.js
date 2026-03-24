@@ -122,24 +122,38 @@ async function carregarHorarios() {
 
   const params = new URLSearchParams({ data, barbeiro, servico });
 
+  console.log('HORARIOS PARAMS:', { data, barbeiro, servico });
+
   const res = await fetch(`/api/horarios-disponiveis?${params.toString()}`);
   const horarios = await res.json();
 
-  if (!res.ok) {
-    mensagem.textContent = horarios.erro;
-    return;
-  }
+  console.log('STATUS HORARIOS:', res.status);
+  console.log('URL HORARIOS:', `/api/horarios-disponiveis?${params.toString()}`);
+  console.log('RESPOSTA HORARIOS:', horarios);
 
-  selectHora.innerHTML = '<option value="">Selecione</option>';
+if (!res.ok) {
+  mensagem.textContent = horarios.erro || 'Erro ao buscar horários.';
+  return;
+}
 
-  horarios.forEach((h) => {
-    const opt = document.createElement('option');
-    opt.value = h;
-    opt.textContent = h;
-    selectHora.appendChild(opt);
-  });
+if (!Array.isArray(horarios) || horarios.length === 0) {
+  selectHora.innerHTML = '<option value="">Nenhum horário disponível</option>';
+  horariosDiv.innerHTML = '<p class="aviso-horario">Nenhum horário disponível.</p>';
+  mensagem.textContent = 'Nenhum horário disponível para essa combinação.';
+  return;
+}
 
-  renderizarHorariosEmBotoes(horarios);
+mensagem.textContent = '';
+selectHora.innerHTML = '<option value="">Selecione o horário</option>';
+
+horarios.forEach((h) => {
+  const opt = document.createElement('option');
+  opt.value = h;
+  opt.textContent = h;
+  selectHora.appendChild(opt);
+});
+
+renderizarHorariosEmBotoes(horarios);
 }
 
 inputData.addEventListener('change', carregarHorarios);
