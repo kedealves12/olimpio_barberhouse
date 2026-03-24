@@ -1067,15 +1067,17 @@ async function criarUsuariosPadrao() {
     const senhaDanilo = await bcrypt.hash('1234', 10);
     const senhaThiago = await bcrypt.hash('1234', 10);
 
-    await pool.query(`DELETE FROM usuarios;`);
-
     await pool.query(
       `
       INSERT INTO usuarios (nome, username, senha, role, percentual_comissao)
       VALUES
         ($1, $2, $3, $4, $5),
         ($6, $7, $8, $9, $10)
-      ON CONFLICT (username) DO NOTHING;
+      ON CONFLICT (username) DO UPDATE SET
+        nome = EXCLUDED.nome,
+        senha = EXCLUDED.senha,
+        role = EXCLUDED.role,
+        percentual_comissao = EXCLUDED.percentual_comissao;
       `,
       [
         'Danilo', 'danilo', senhaDanilo, 'admin', 100,
