@@ -159,13 +159,6 @@ async function carregarBarbeiros() {
 }
 
 async function carregarHorarios() {
-  const data = inputData.value;
-  const barbeiro = selectBarbeiro.value;
-  const servico = selectServico.value;
-
-  mensagem.textContent = '';
-  limparHorarios();
-
   if (!data || !barbeiro || !servico) {
     mensagem.textContent = 'Selecione barbeiro, serviço e data para ver os horários.';
     return;
@@ -178,10 +171,13 @@ async function carregarHorarios() {
   }
 
   try {
-    const res = await fetch(
-      `/api/horarios-disponiveis?data=${encodeURIComponent(data)}&barbeiro=${encodeURIComponent(barbeiro)}&servico=${encodeURIComponent(servico)}`
-    );
+    const params = new URLSearchParams({
+      data,
+      barbeiro,
+      servico
+    });
 
+    const res = await fetch(`/api/horarios-disponiveis?${params.toString()}`);
     const horarios = await res.json();
 
     if (!res.ok) {
@@ -195,6 +191,10 @@ async function carregarHorarios() {
       mensagem.textContent = 'Tente outro barbeiro, outro horário ou uma duração menor.';
       return;
     }
+
+    selectHora.innerHTML = '<option value="">Selecione o horário</option>';
+    horariosDiv.innerHTML = '';
+    mensagem.textContent = '';
 
     horarios.forEach((hora) => {
       const option = document.createElement('option');
