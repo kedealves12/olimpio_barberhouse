@@ -6,23 +6,22 @@ const bcrypt = require('bcrypt');
 const pool = require('./config/db');
 
 const app = express();
+
+app.set('trust proxy', 1);
+
 const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(express.static('public'));
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || 'segredo-barbearia',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production'
-    }
-  })
-);
+app.use(session({
+  secret: process.env.SESSION_SECRET || '123456',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false
+  }
+}));
 
 const servicos = {
   corte: { nome: 'Corte', valor: 30, duracao: 45 },
