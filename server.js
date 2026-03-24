@@ -1113,11 +1113,7 @@ async function criarUsuariosPadrao() {
   await iniciarBanco();
   await criarUsuariosPadrao();
 
-  app.listen(PORT, '127.0.0.1', () => {
-    console.log(`Servidor rodando em http://127.0.0.1:${PORT}`);
+  app.listen(process.env.PORT || 3001, () => {
+    console.log('Servidor rodando');
   });
 })();
-
-app.listen(PORT,  () => {
-  console.log(`Servidor rodando em http://127.0.0.1:${PORT}`);
-});
