@@ -52,7 +52,7 @@ function configurarCampoData() {
 }
 
 function validarDataSelecionada(data) {
-  if (!data) return 'Selecione a data.';
+  if (!data) return 'Data obrigatória.';
 
   const hoje = new Date();
   hoje.setHours(0, 0, 0, 0);
@@ -62,14 +62,26 @@ function validarDataSelecionada(data) {
 
   const escolhida = new Date(`${data}T00:00:00`);
 
-  if (Number.isNaN(escolhida.getTime())) return 'Data inválida.';
-  if (escolhida.getDay() === 0) return 'Não atendemos aos domingos.';
+  if (Number.isNaN(escolhida.getTime())) {
+    return 'Data inválida.';
+  }
 
-  const escolhidaISO = dataLocalISO(escolhida);
-  const hojeISO = dataLocalISO(hoje);
-  const amanhaISO = dataLocalISO(amanha);
+  if (escolhida.getDay() === 0) {
+    return 'Não atendemos aos domingos.';
+  }
 
-  if (escolhidaISO !== hojeISO && escolhidaISO !== amanhaISO) {
+  const formato = (d) => {
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, '0');
+    const dia = String(d.getDate()).padStart(2, '0');
+    return `${ano}-${mes}-${dia}`;
+  };
+
+  const dataEscolhida = formato(escolhida);
+  const hojeISO = formato(hoje);
+  const amanhaISO = formato(amanha);
+
+  if (dataEscolhida !== hojeISO && dataEscolhida !== amanhaISO) {
     return 'Agendamento disponível apenas para hoje e amanhã.';
   }
 
@@ -230,9 +242,20 @@ agendaForm.addEventListener('submit', async (event) => {
   const telefone = document.getElementById('telefone').value.trim();
   const barbeiro = selectBarbeiro.value;
   const servico = selectServico.value;
-  const data = inputData.value;
+  
+  let data = inputData.value;
+
+// 🔥 converte a data pro formato certo
+if (data.includes('/')) {
+  const [dia, mes, ano] = data.split('/');
+  data = `${ano}-${mes}-${dia}`;
+}
+
   const hora = selectHora.value || horaSelecionada;
   const pagamento = document.getElementById('pagamento').value;
+
+  console.log('DATA INPUT:', inputData.value);
+console.log('DATA ENVIADA:', data);
 
   if (!cliente || !barbeiro || !servico || !data || !hora) {
     mensagem.textContent = 'Preencha os campos obrigatórios.';
