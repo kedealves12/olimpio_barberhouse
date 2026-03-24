@@ -18,8 +18,12 @@ app.use(session({
   secret: process.env.SESSION_SECRET || '123456',
   resave: false,
   saveUninitialized: false,
+  proxy: true,
   cookie: {
-    secure: false
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1000 * 60 * 60 * 12
   }
 }));
 
@@ -184,6 +188,10 @@ app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
+    if (!username || !password) {
+      return res.status(400).json({ erro: 'Usuário e senha são obrigatórios' });
+    }
+
     const result = await pool.query(
       `SELECT id, nome, username, role, senha
        FROM usuarios
@@ -203,17 +211,28 @@ app.post('/api/login', async (req, res) => {
       return res.status(401).json({ erro: 'Usuário ou senha inválidos' });
     }
 
-    req.session.user = {
+    req.session.usuario = {
       id: usuario.id,
       nome: usuario.nome,
       username: usuario.username,
       role: usuario.role
     };
 
-    res.json(req.session.user);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ erro: 'Erro no servidor' });
+    req.session.save((err) => {
+      if (err) {
+        console.error('Erro ao salvar sessão:', err);
+        return res.status(500).json({ erro: 'Erro ao salvar sessão' });
+      }
+
+      return res.json({
+        ok: true,
+        role: usuario.role,
+        nome: usuario.nome
+      });
+    });
+  } catch (err) {
+    console.error('Erro no login:', err);
+    return res.status(500).json({ erro: 'Erro no servidor' });
   }
 });
 

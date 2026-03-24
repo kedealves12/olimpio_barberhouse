@@ -9,11 +9,11 @@ form.addEventListener('submit', async (e) => {
 
   try {
     const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  credentials: 'include', // 🔥 ESSA LINHA
+  body: JSON.stringify({ username, password })
+});
     const data = await res.json();
 
     if (!res.ok) {
