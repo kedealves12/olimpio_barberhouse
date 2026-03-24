@@ -3,27 +3,26 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
+const path = require('path');
 const pool = require('./config/db');
-const path = require('path'); // 👈 sobe pra cá
 
 const app = express();
-
 
 app.set('trust proxy', 1);
 
 app.use(express.json());
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
   secret: process.env.SESSION_SECRET || '123456',
   resave: false,
   saveUninitialized: false,
-  proxy: true, // importante no render
+  proxy: true,
   cookie: {
     httpOnly: true,
-    sameSite: 'none', // 🔥 ESSENCIAL
-    secure: true // 🔥 ESSENCIAL (https)
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1000 * 60 * 60 * 12
   }
 }));
 
@@ -211,7 +210,7 @@ app.post('/api/login', async (req, res) => {
       return res.status(401).json({ erro: 'Usuário ou senha inválidos' });
     }
 
-    req.session.usuario = {
+    req.session.user = {
       id: usuario.id,
       nome: usuario.nome,
       username: usuario.username,
@@ -1109,6 +1108,16 @@ async function criarUsuariosPadrao() {
   }
 }
 
+(async () => {
+  await iniciarBanco();
+  await criarUsuariosPadrao();
+
+  const port = process.env.PORT || 3001;
+
+  app.listen(port, () => {
+    console.log(`Servidor rodando na porta ${port}`);
+  });
+})();
 (async () => {
   await iniciarBanco();
   await criarUsuariosPadrao();
