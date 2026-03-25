@@ -242,7 +242,7 @@ app.get('/api/servicos', (req, res) => {
 });
 
 app.get('/api/teste', (req, res) => {
-  res.send('ok');
+  res.json({ ok: true });
 });
 
 app.get('/api/barbeiros', async (req, res) => {
