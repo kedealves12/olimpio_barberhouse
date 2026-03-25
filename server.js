@@ -1,3 +1,5 @@
+console.log("ATUALIZAÇÃO HORARIOS");
+
 require('dotenv').config();
 
 const express = require('express');
