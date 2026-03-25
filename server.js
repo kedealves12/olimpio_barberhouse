@@ -253,6 +253,8 @@ app.get('/api/servicos', (req, res) => {
   res.json(servicos);
 });
 
+console.log("ROTA BARBEIROS CARREGADA");
+
 app.get('/api/barbeiros', async (req, res) => {
   try {
     const barbeiros = await buscarBarbeirosDaAgenda();
