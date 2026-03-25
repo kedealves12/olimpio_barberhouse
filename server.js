@@ -241,8 +241,6 @@ app.get('/api/servicos', (req, res) => {
   res.json(servicos);
 });
 
-app.get('/api/barbeiros', async (req, res) => {
-
 app.get('/api/teste', (req, res) => {
   res.send('ok');
 });
