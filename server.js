@@ -155,6 +155,14 @@ app.get('/api/teste', (req, res) => {
   res.json({ ok: true, mensagem: 'Servidor funcionando' });
 });
 
+app.get('/api/teste2', (req, res) => {
+  res.json({ ok: true, mensagem: 'teste2' });
+});
+
+app.get('/api/barbeiros', async (req, res) => {
+  res.json([{ id: 999, nome: 'TESTE BARBEIRO' }]);
+});
+
 app.get('/api/teste-banco', async (req, res) => {
   try {
     const resultado = await pool.query('SELECT NOW()');
