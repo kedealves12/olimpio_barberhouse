@@ -264,9 +264,9 @@ app.get('/api/barbeiros', async (req, res) => {
 app.get('/api/horarios-disponiveis', async (req, res) => {
   const { data, barbeiro, servico } = req.query;
 
- if (!data || !barbeiro || !servico) {
-  return res.status(400).json({ erro: 'Data, barbeiro e serviço são obrigatórios.' });
-}
+  if (!data || !barbeiro || !servico) {
+    return res.status(400).json({ erro: 'Data, barbeiro e serviço são obrigatórios.' });
+  }
 
   const erroData = validarDataAgendamento(data);
   if (erroData) {
