@@ -1,4 +1,4 @@
-console.log("🔥 SERVIDOR NOVO ONLINE");
+console.log("TESTE NOVO");
 
 require('dotenv').config();
 
