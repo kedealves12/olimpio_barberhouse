@@ -241,10 +241,6 @@ app.get('/api/servicos', (req, res) => {
   res.json(servicos);
 });
 
-app.get('/api/teste', (req, res) => {
-  res.json({ ok: true });
-});
-
 app.get('/api/barbeiros', async (req, res) => {
   try {
     const barbeiros = await buscarBarbeirosDaAgenda();
