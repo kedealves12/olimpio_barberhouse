@@ -166,14 +166,20 @@ app.get('/api/barbeiros', async (req, res) => {
 app.get('/api/teste-banco', async (req, res) => {
   try {
     const resultado = await pool.query('SELECT NOW()');
-    res.json({
+
+    return res.json({
       ok: true,
       mensagem: 'Banco conectado com sucesso',
       horario: resultado.rows[0].now
     });
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ ok: false, erro: 'Erro ao conectar no banco' });
+    console.error('ERRO BANCO:', error);
+
+    return res.status(500).json({
+      ok: false,
+      erro: 'Erro ao conectar no banco'
+    });
   }
 });
 
