@@ -244,7 +244,7 @@ app.get('/api/servicos', (req, res) => {
 app.get('/api/barbeiros', async (req, res) => {
 
 app.get('/api/teste', (req, res) => {
-  res.json({ ok: true, mensagem: 'Servidor funcionando' });
+  res.send('ok');
 });
 
 app.get('/api/barbeiros', async (req, res) => {
