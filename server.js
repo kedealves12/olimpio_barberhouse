@@ -1,3 +1,5 @@
+console.log("🔥 SERVIDOR NOVO ONLINE");
+
 require('dotenv').config();
 
 const express = require('express');
