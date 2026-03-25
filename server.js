@@ -242,6 +242,12 @@ app.get('/api/servicos', (req, res) => {
 });
 
 app.get('/api/barbeiros', async (req, res) => {
+
+app.get('/api/teste', (req, res) => {
+  res.json({ ok: true, mensagem: 'Servidor funcionando' });
+});
+
+app.get('/api/barbeiros', async (req, res) => {
   try {
     const barbeiros = await buscarBarbeirosDaAgenda();
     res.json(barbeiros);
@@ -259,10 +265,14 @@ app.get('/api/horarios-disponiveis', async (req, res) => {
   }
 
   const erroData = validarDataAgendamento(data);
-  if (erroData) return res.status(400).json({ erro: erroData });
+  if (erroData) {
+    return res.status(400).json({ erro: erroData });
+  }
 
   const s = servicos[servico];
-  if (!s) return res.status(400).json({ erro: 'Serviço inválido.' });
+  if (!s) {
+    return res.status(400).json({ erro: 'Serviço inválido.' });
+  }
 
   try {
     const base = gerarHorarios();
@@ -298,7 +308,7 @@ app.get('/api/horarios-disponiveis', async (req, res) => {
 
           for (const item of result.rows) {
             const i = horarioParaMinutos(String(item.hora).slice(0, 5));
-            const f = i + Number(item.duracao);
+            const f = i + Number(item.duracao || 0);
 
             if (conflito(inicio, fim, i, f)) {
               livre = false;
@@ -318,13 +328,15 @@ app.get('/api/horarios-disponiveis', async (req, res) => {
       return res.json(livres);
     }
 
+    const barbeiroId = Number(barbeiro);
+
     const result = await pool.query(
       `SELECT hora, duracao
        FROM agendamentos
        WHERE data = $1
          AND barbeiro_id = $2
          AND status = 'agendado'`,
-      [data, barbeiro]
+      [data, barbeiroId]
     );
 
     const livres = base.filter((h) => {
@@ -337,7 +349,7 @@ app.get('/api/horarios-disponiveis', async (req, res) => {
 
       for (const item of result.rows) {
         const i = horarioParaMinutos(String(item.hora).slice(0, 5));
-        const f = i + Number(item.duracao);
+        const f = i + Number(item.duracao || 0);
 
         if (conflito(inicio, fim, i, f)) return false;
       }
@@ -345,138 +357,10 @@ app.get('/api/horarios-disponiveis', async (req, res) => {
       return true;
     });
 
-    res.json(livres);
+    return res.json(livres);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ erro: 'Erro ao buscar horários disponíveis.' });
-  }
-});
-
-app.post('/api/agendamentos', async (req, res) => {
-  let { cliente, telefone, barbeiro, servico, data, hora, pagamento } = req.body;
-
-  if (!cliente || !barbeiro || !servico || !data || !hora) {
-    return res.status(400).json({ erro: 'Preencha os campos obrigatórios.' });
-  }
-
-  const erroData = validarDataAgendamento(data);
-  if (erroData) return res.status(400).json({ erro: erroData });
-
-  const s = servicos[servico];
-  if (!s) return res.status(400).json({ erro: 'Serviço inválido.' });
-
-  try {
-    const inicioNovo = horarioParaMinutos(hora);
-    const fimNovo = inicioNovo + s.duracao;
-
-    const agora = new Date();
-    const hojeLocal = dataLocalISO(agora);
-    const agoraMinutos = agora.getHours() * 60 + agora.getMinutes();
-
-    if (data === hojeLocal && inicioNovo <= agoraMinutos + 10) {
-      return res.status(400).json({ erro: 'Esse horário já passou. Escolha um horário futuro.' });
-    }
-
-    if (fimNovo > 19 * 60) {
-      return res.status(400).json({ erro: 'Esse serviço ultrapassa o horário de funcionamento.' });
-    }
-
-    if (invadeHorarioAlmoco(inicioNovo, fimNovo)) {
-      return res.status(400).json({ erro: 'Esse serviço invade o horário de almoço. Escolha outro horário.' });
-    }
-
-    let barbeiroNome = '';
-    let barbeiroIdFinal = null;
-
-    if (barbeiro === 'qualquer') {
-      const barbeiros = await buscarBarbeirosDaAgenda();
-      let barbeiroEscolhido = null;
-
-      for (const b of barbeiros) {
-        const resultado = await pool.query(
-          `SELECT hora, duracao
-           FROM agendamentos
-           WHERE data = $1
-             AND barbeiro_id = $2
-             AND status = 'agendado'`,
-          [data, b.id]
-        );
-
-        let livre = true;
-
-        for (const item of resultado.rows) {
-          const inicioExistente = horarioParaMinutos(String(item.hora).slice(0, 5));
-          const fimExistente = inicioExistente + Number(item.duracao);
-
-          if (conflito(inicioNovo, fimNovo, inicioExistente, fimExistente)) {
-            livre = false;
-            break;
-          }
-        }
-
-        if (livre) {
-          barbeiroEscolhido = b;
-          break;
-        }
-      }
-
-      if (!barbeiroEscolhido) {
-        return res.status(400).json({ erro: 'Nenhum barbeiro disponível nesse horário.' });
-      }
-
-      barbeiroIdFinal = barbeiroEscolhido.id;
-      barbeiroNome = barbeiroEscolhido.nome;
-    } else {
-      barbeiroIdFinal = Number(barbeiro);
-
-      const conflitoResult = await pool.query(
-        `SELECT hora, duracao
-         FROM agendamentos
-         WHERE data = $1
-           AND barbeiro_id = $2
-           AND status = 'agendado'`,
-        [data, barbeiroIdFinal]
-      );
-
-      for (const item of conflitoResult.rows) {
-        const inicioExistente = horarioParaMinutos(String(item.hora).slice(0, 5));
-        const fimExistente = inicioExistente + Number(item.duracao);
-
-        if (conflito(inicioNovo, fimNovo, inicioExistente, fimExistente)) {
-          return res.status(400).json({ erro: 'Horário indisponível para esse barbeiro.' });
-        }
-      }
-
-      const barbeiroResult = await pool.query(
-        `SELECT nome FROM usuarios WHERE id = $1`,
-        [barbeiroIdFinal]
-      );
-
-      barbeiroNome = barbeiroResult.rows[0]?.nome || '';
-    }
-
-    await pool.query(
-      `INSERT INTO agendamentos
-      (cliente, telefone, barbeiro_id, servico, data, hora, valor, duracao, pagamento, status, origem)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'agendado', 'agendado')`,
-      [cliente, telefone || '', barbeiroIdFinal, s.nome, data, hora, s.valor, s.duracao, pagamento || '']
-    );
-
-    const dataFormatada = data.split('-').reverse().join('/');
-    await criarNotificacao(
-      barbeiroIdFinal,
-      'Novo agendamento',
-      `${cliente} agendou ${s.nome} para ${dataFormatada} às ${hora}.`
-    );
-
-    res.json({
-      ok: true,
-      mensagem: 'Agendamento salvo com sucesso.',
-      barbeiroNome
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ erro: 'Erro ao salvar agendamento.' });
+    console.error('Erro em /api/horarios-disponiveis:', error);
+    return res.status(500).json({ erro: 'Erro ao buscar horários disponíveis.' });
   }
 });
 
